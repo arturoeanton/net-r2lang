@@ -34,7 +34,10 @@ public class UserFunction
                     newEnv.Set("this", sv2);
                     if (newEnv.Get("super") is (var supVal, true) && supVal is Dictionary<string, object> supMap)
                     {
-                        newEnv.Set("super", supMap["super"]);
+                        if (supMap.ContainsKey("super"))
+                        {
+                            newEnv.Set("super", supMap["super"]);
+                        }
                     }
                 }
             }

@@ -16,6 +16,11 @@ public class Environment
             Dir = parent.Dir;
         }
     }
+    
+    public Environment GetOuter()
+    {
+        return outer;
+    }
 
     public void Set(string name, object value)
     {

@@ -29,6 +29,7 @@ public class CallExpression : INode
             case UserFunction uf:
                 if (flagSuper)
                 {
+                    //var superEnv = env.GetOuter().GetOuter();
                     return uf.SuperCall(env, argVals.ToArray());
                 }
 
