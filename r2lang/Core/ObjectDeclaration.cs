@@ -1,3 +1,4 @@
+#nullable disable
 using R2Lang.Core.Ast;
 
 namespace R2Lang.Core;

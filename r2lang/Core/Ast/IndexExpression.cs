@@ -1,3 +1,4 @@
+#nullable disable
 namespace R2Lang.Core.Ast;
 
 public class IndexExpression : INode

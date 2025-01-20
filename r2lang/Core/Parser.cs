@@ -1,3 +1,4 @@
+#nullable disable
 using R2Lang.Core.Ast;
 
 namespace R2Lang.Core;
@@ -236,6 +237,11 @@ public class Parser
             NextToken();
             return new LetStatement{Name= name, Value= null};
         }
+        
+        if(_curToken.Type==TokenType.IN){
+           return new LetStatement{Name= name, Value= null};
+        }
+
         if(!(_curToken.Type==TokenType.SYMBOL && _curToken.Value=="="))
             except("Falta '=' en let x=...");
         NextToken();
@@ -321,15 +327,27 @@ public class Parser
         // let i ...
         if(_curToken.Type==TokenType.LET || _curToken.Type==TokenType.VAR)
         {
-            var letStmt= parseLetStatement();
+            var letStmt= parseLetStatement() ;
             init= letStmt;
             // check si hay 'in'
-            if(_curToken.Type==TokenType.IDENT && _curToken.Value=="in")
+            if(_curToken.Type==TokenType.IN && _curToken.Value=="in")
             {
-                inFlag= true;
                 NextToken(); // comer 'in'
-                inArray= _curToken.Value;
-                NextToken(); // 
+
+                var exp = parseExpression();
+                INode initStmt = null;
+                if(exp is Identifier){
+                    inArray= ((Identifier)exp).Name;
+                }
+                if (exp is AccessExpression){
+                    inArray= ((AccessExpression)exp).Member;
+                }
+
+                if (exp is CallExpression)
+                {
+                    var call = (CallExpression)exp;
+                    initStmt = call;
+                }
                 // skip ) ...
                 if(!(_curToken.Type==TokenType.SYMBOL && _curToken.Value==")"))
                     except("Falta ')' en for(... in ...)");
@@ -338,11 +356,14 @@ public class Parser
 
                 // no replico la logica EXACTA de tu Go, 
                 // pero sí la idea for in ...
+                var inIndexName = ((LetStatement)letStmt).Name;
+                
                 var forStmt= new ForStatement{
-                    Init= letStmt, 
+                    Init= initStmt, 
                     Body= body,
                     inFlag= true,
-                    inArray= inArray
+                    inArray= inArray,
+                    inIndexName= inIndexName
                 };
                 return forStmt;
             }

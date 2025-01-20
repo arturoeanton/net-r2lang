@@ -1,3 +1,4 @@
+#nullable disable
 namespace R2Lang.Core;
 
 public class Environment

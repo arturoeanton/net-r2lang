@@ -1,7 +1,14 @@
+#nullable disable
 namespace R2Lang.Core;
 
   public static class BuiltinOps
     {
+        
+        //ToArray
+        public static object[] ToArray(params object[] args)
+        {
+            return args;
+        }
         public static double ToFloat(object v)
         {
             if (v == null) return 0;
@@ -47,10 +54,37 @@ namespace R2Lang.Core;
                 return ToFloat(a) + ToFloat(b);
             }
 
+         
+            // fallback => numeric
+            
+            if ((a is List<object>) && (b is List<object>))
+            {
+                var res = new List<object>();
+                res.AddRange((List<object>)a);
+                res.AddRange((List<object>)b);
+                return res;
+            }
+
+            if (a is List<object>  && b is object)
+            {
+                var res = new List<object>();
+                res.AddRange((List<object>)a);
+                res.Add(b);
+                return res;
+            }
+            
+            if (b is List<object> && a is object)
+            {
+                var res = new List<object>();
+                res.Add(a);
+                res.AddRange((List<object>)b);
+                return res;
+            }
+            
             // array + array => etc
             if (a is string sa) return sa + (b?.ToString() ?? "");
             if (b is string sb) return (a?.ToString() ?? "") + sb;
-            // fallback => numeric
+            
             return ToFloat(a) + ToFloat(b);
         }
 

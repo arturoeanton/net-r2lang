@@ -1,3 +1,4 @@
+#nullable disable
 namespace R2Lang.Core.Ast;
 
 public class AccessExpression : INode
@@ -26,8 +27,17 @@ public class AccessExpression : INode
 
         if (objVal is List<object> list)
         {
-            // Implement len, push, etc. 
-            // (No replicamos toda la lógica de Go aquí)
+            //implement len
+            if (Member == "len")
+                return (BuiltinFunction)(args =>
+                {
+                    // 1) Validar que no se pase ningún argumento
+                    if (args.Length != 0)
+                        throw new Exception("len() no admite argumentos");
+
+                    // 2) Retornar la longitud como double (o int). 
+                    return (double)list.Count;
+                });
         }
 
         throw new Exception("AccessExpression: Not supported type => " + objVal?.GetType().Name);
