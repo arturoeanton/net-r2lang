@@ -1,6 +1,4 @@
-﻿using System;
-using R2Lang.Core; // <-- tu namespace con Runner
-
+﻿using R2Lang.Core;
 namespace Program
 {
     internal class Program
