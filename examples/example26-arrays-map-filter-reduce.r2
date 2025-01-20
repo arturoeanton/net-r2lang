@@ -13,7 +13,7 @@ function main(){
 
     a = a.add(6);
     println("a.add(6) >>>",a);
-    a = a.del(a.length()-1);
+    a = a.del(a.len()-1);
     println("a.del(a.length()-1) >>>",a);
 
     println("a.find(3)  >>>",a.find(3));
