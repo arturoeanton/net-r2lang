@@ -1,80 +1,17 @@
-class Figura {
-    constructor() {
-        this.color = "red";
-    }
-    getColor() {
-        return this.color;
-    }
+
+func main() {
+    let aa = ["a", "b", "c"];
+    let bb = [1, 2, 3];
+    println("aa:", aa[-3]);
+    let cc = aa + bb
+    print("cc:", "hola" + cc  +"fin");
+    let mm = { "nombre": "Carlos", "edad": 30 };
+    mm["pp"] = "hola";
+    print("mm:", mm.nombre, mm.edad, mm.pp);
 }
-
-class Circulo extends Figura {
-    constructor() {
-        super.constructor();
-        this.radio = 10;
-    }
-    getRadio() {
-        return this.radio;
-    }
-}
-
-class Cuadrado extends Figura {
-    constructor() {
-        super.constructor();
-        this.lado = 10;
-    }
-    getLado() {
-        return this.lado;
-    }
-}
-
-class Triangulo extends Figura {
-    constructor() {
-        super.constructor();
-        this.base = 10;
-        this.altura = 10;
-    }
-    getBase() {
-        return this.base;
-    }
-    getAltura() {
-        return this.altura;
-    }
-}
-
-class Cuadrado2 extends Cuadrado {
-    constructor() {
-        super.constructor();
-        this.lado = 20;
-    }
-}
-
-function main() {
-    print("Clases que heredan de Figura");
-    print("Circulo");
-    c =  Circulo();
-    print(c.getColor());
-    print(c.getRadio());
+// output:
+// aa: a 
+// cc: [hola, a, b, c, 1, 2, 3, fin] 
+// mm: Carlos 30 hola 
 
 
-    print("Cuadrado");
-    cu =  Cuadrado();
-    print(cu.getColor());
-    print(cu.getLado());
-
-    print("Cuadrado2");
-    cu2 =  Cuadrado2();
-    print(cu2.getColor());
-    print(cu2.getLado());
-
-    print("Triangulo");
-    t =  Triangulo();
-    print(t.getColor());
-    print(t.getBase());
-    print(t.getAltura());
-
-
-
-
-
-
-}

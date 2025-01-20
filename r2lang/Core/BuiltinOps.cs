@@ -31,7 +31,7 @@ namespace R2Lang.Core;
             return true;
         }
 
-        public static bool Equals(object a, object b)
+        public static bool AreEquals(object a, object b)
         {
             // num => compare
             if (IsNumeric(a) && IsNumeric(b))
@@ -39,7 +39,7 @@ namespace R2Lang.Core;
                 return Math.Abs(ToFloat(a) - ToFloat(b)) < 1e-9;
             }
 
-            return object.Equals(a, b);
+            return Equals(a, b);
         }
 
         private static bool IsNumeric(object x)
@@ -65,18 +65,18 @@ namespace R2Lang.Core;
                 return res;
             }
 
-            if (a is List<object>  && b is object)
+            if (a is List<object>)
             {
                 var res = new List<object>();
                 res.AddRange((List<object>)a);
-                res.Add(b);
+                if (b != null) res.Add(b);
                 return res;
             }
             
-            if (b is List<object> && a is object)
+            if (b is List<object>)
             {
                 var res = new List<object>();
-                res.Add(a);
+                if (a != null) res.Add(a);
                 res.AddRange((List<object>)b);
                 return res;
             }

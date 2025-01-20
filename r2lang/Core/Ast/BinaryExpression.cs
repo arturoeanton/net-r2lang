@@ -22,8 +22,8 @@ public class BinaryExpression : INode
             case ">": return BuiltinOps.ToFloat(lv) > BuiltinOps.ToFloat(rv);
             case "<=": return BuiltinOps.ToFloat(lv) <= BuiltinOps.ToFloat(rv);
             case ">=": return BuiltinOps.ToFloat(lv) >= BuiltinOps.ToFloat(rv);
-            case "==": return BuiltinOps.Equals(lv, rv);
-            case "!=": return !BuiltinOps.Equals(lv, rv);
+            case "==": return BuiltinOps.AreEquals(lv, rv);
+            case "!=": return !BuiltinOps.AreEquals(lv, rv);
             default:
                 throw new Exception("Unsupported binary operator: " + Op);
         }
