@@ -505,10 +505,19 @@ public class Parser
     {
         var left= parseFactor();
         // parse binarios
-        while(_curToken.Type==TokenType.SYMBOL && IsBinaryOp(_curToken.Value))
+        while(_curToken.Type==TokenType.SYMBOL && (IsBinaryOp(_curToken.Value) || _curToken.Value=="!" || _curToken.Value=="="))
         {
             var op= _curToken.Value;
             NextToken();
+            if (_curToken.Type == TokenType.SYMBOL && _curToken.Value == "=")
+            {
+                op += "=";
+                NextToken();
+            }else if (op == "=")
+            {
+                return left;
+            }
+
             var right= parseFactor();
             left= new BinaryExpression{ Left= left, Op= op, Right= right};
         }

@@ -1,6 +1,6 @@
 function main(){
 
-    a = [1,5,3,2,4];
+    let a = [1,5,3,2,4];
     println("a",a)
     a = a.sort(func (a,b){ b < a})
     println("a = a.sort(func (a,b){ b < a})")
@@ -13,12 +13,10 @@ function main(){
 
     a = a.add(6);
     println("a.add(6) >>>",a);
-
-    a = a.del(a.length()-1);
-    
+    a = a.del(a.len()-1);
     println("a.del(a.length()-1) >>>",a);
 
-   /* println("a.find(3)  >>>",a.find(3));
+    println("a.find(3)  >>>",a.find(3));
     println("a.find(func(v){ v==3 }) >>>",a.find(func(v){ v==3 }));
     println("a.find(func(v,p){ v==p },3) >>>",a.find(func(v,p){ v==p },3));
 
@@ -34,6 +32,5 @@ function main(){
     let arr = ["Hola", "Mundo", "R2"];
     let joined = arr.join("-");
     print("arr.join('-') =>", joined); // "Hola-Mundo-R2"
-    //*/
 
 }
