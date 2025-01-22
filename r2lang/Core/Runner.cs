@@ -29,6 +29,8 @@ public static class Runner
             var env = new Environment();
             env.Dir = baseDir;
             Builtins.RegisterAll(env);
+            Libs.R2ArrayUtils.RegisterAll(env);
+            Libs.R2Thread.RegisterAll(env);
 
             var parser = new Parser(new Lexer(code));
             parser.SetBaseDir(baseDir);
@@ -49,7 +51,7 @@ public static class Runner
         catch (Exception ex)
         {
             Console.WriteLine("[ERROR] " + ex.Message);
-            return null;
+            return ex;
         }
     }
 }
