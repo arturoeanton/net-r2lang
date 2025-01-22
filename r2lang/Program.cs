@@ -12,8 +12,7 @@ namespace Program
                 // El primer argumento se asume el archivo
                 filename = args[0];
             }
-
-          
+            
             try
             {
                 var rest = args.Skip(1).ToArray();

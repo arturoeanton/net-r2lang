@@ -13,6 +13,7 @@ public static class Builtins
         env.Set("println", (BuiltinFunction)Print);
         
         R2ArrayUtils.RegisterAll(env);
+        R2Thread.RegisterAll(env);
         
     }
 
