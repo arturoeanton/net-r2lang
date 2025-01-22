@@ -23,17 +23,25 @@ public class R2Thread
         {
             throw new Exception("r2_atomic() requires at least 1 argument");
         }
+        var rest = args.Skip(1).ToArray();
+
         // 1) primer argumento: UserFunction
         if (args[0] is UserFunction fn)
         {
             // 2) resto de argumentos
-            var rest = args.Skip(1).ToArray();
             object out1;
             lock (waitGroup)
             {
                 out1 = fn.Call(rest);
             }
-
+            return out1;
+        }else if (args[0] is BuiltinFunction bf)
+        {
+            object out1;
+            lock (waitGroup)
+            {
+                out1 = bf.Invoke(rest);
+            }
             return out1;
         }
         else
