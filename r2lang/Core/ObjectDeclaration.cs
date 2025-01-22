@@ -3,7 +3,6 @@ using R2Lang.Core.Ast;
 
 namespace R2Lang.Core;
 
-
 public class ObjectDeclaration : INode
 {
     public string Name { get; set; }
@@ -34,7 +33,6 @@ public class ObjectDeclaration : INode
         blueprint["ClassName"] = Name;
 
         foreach (var m in Members)
-        {
             if (m is LetStatement ls)
             {
                 blueprint[ls.Name] = null;
@@ -51,7 +49,6 @@ public class ObjectDeclaration : INode
                 };
                 blueprint[fd.Name] = uf;
             }
-        }
 
         env.Set(Name, blueprint);
         return null;

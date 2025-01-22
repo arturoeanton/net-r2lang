@@ -25,16 +25,10 @@ public class ImportStatement : INode
         // alias => env[alias]= moduleEnv.store
         // sino => exportAll a env
         if (!string.IsNullOrEmpty(Alias))
-        {
             env.Set(Alias, moduleEnv.ExportAll());
-        }
         else
-        {
             foreach (var kv in moduleEnv.ExportAll())
-            {
                 env.Set(kv.Key, kv.Value);
-            }
-        }
 
         return null;
     }

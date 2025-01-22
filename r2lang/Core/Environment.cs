@@ -3,21 +3,19 @@ namespace R2Lang.Core;
 
 public class Environment
 {
-    private Dictionary<string, object> store;
-    private Environment outer;
-    public string Dir { get; set; } = "";
-    public string CurrenFx { get; set; } = "";
+    private readonly Environment outer;
+    private readonly Dictionary<string, object> store;
 
     public Environment(Environment parent = null)
     {
         store = new Dictionary<string, object>();
         outer = parent;
-        if (parent != null)
-        {
-            Dir = parent.Dir;
-        }
+        if (parent != null) Dir = parent.Dir;
     }
-    
+
+    public string Dir { get; set; } = "";
+    public string CurrenFx { get; set; } = "";
+
     public Environment GetOuter()
     {
         return outer;

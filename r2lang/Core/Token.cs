@@ -43,12 +43,6 @@ public enum TokenType
 
 public class Token
 {
-    public TokenType Type { get; set; }
-    public string Value { get; set; }
-    public int Line { get; set; }
-    public int Pos { get; set; }
-    public int Col { get; set; }
-
     public Token(TokenType type, string value, int line, int pos, int col)
     {
         Type = type;
@@ -57,6 +51,12 @@ public class Token
         Pos = pos;
         Col = col;
     }
+
+    public TokenType Type { get; set; }
+    public string Value { get; set; }
+    public int Line { get; set; }
+    public int Pos { get; set; }
+    public int Col { get; set; }
 
     public override string ToString()
     {

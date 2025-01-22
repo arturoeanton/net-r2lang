@@ -10,13 +10,8 @@ public class IfStatement : INode
     public object Eval(Environment env)
     {
         var cond = Condition.Eval(env);
-        if (BuiltinOps.ToBool(cond))
-        {
-            return Consequence?.Eval(env);
-        }
-        else
-        {
-            return Alternative?.Eval(env);
-        }
+        if (BuiltinOps.ToBool(cond)) return Consequence?.Eval(env);
+
+        return Alternative?.Eval(env);
     }
 }

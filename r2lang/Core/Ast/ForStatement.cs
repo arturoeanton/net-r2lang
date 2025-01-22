@@ -1,25 +1,24 @@
 #nullable disable
 using R2Lang.Core;
 using R2Lang.Core.Ast;
-
+using Environment = R2Lang.Core.Environment;
 
 public class ForStatement : INode
 {
+    // nombre de la variable que vamos a iterar (ej: "miArreglo")
+    public string inArray;
+
+    // flag in => for(... in array|dict)
+    public bool inFlag = false;
+
+    // nombre de la variable que usaremos como índice/clave (ej: "i" o "k")
+    public string inIndexName;
     public INode Init { get; set; }
     public INode Condition { get; set; }
     public INode Post { get; set; }
     public BlockStatement Body { get; set; }
 
-    // flag in => for(... in array|dict)
-    public bool inFlag = false;
-
-    // nombre de la variable que vamos a iterar (ej: "miArreglo")
-    public string inArray;
-
-    // nombre de la variable que usaremos como índice/clave (ej: "i" o "k")
-    public string inIndexName;
-
-    public object Eval(R2Lang.Core.Environment env)
+    public object Eval(Environment env)
     {
         // 1) if es "for(... in ...)"
         if (inFlag)
@@ -28,14 +27,14 @@ public class ForStatement : INode
             object raw;
             if (inArray != null)
             {
-                bool found = false;
+                var found = false;
                 (raw, found) = env.Get(inArray);
                 if (!found)
                     throw new Exception($"Variable '{inArray}' no existe en el entorno.");
             }
             else
             {
-                var inner1 = new R2Lang.Core.Environment(env);
+                var inner1 = new Environment(env);
                 raw = Init?.Eval(inner1);
             }
 
@@ -44,7 +43,7 @@ public class ForStatement : INode
             // a) si es List<object> => iterar con índice
             if (list1 is List<object> list)
             {
-                for (int i = 0; i < list.Count; i++)
+                for (var i = 0; i < list.Count; i++)
                 {
                     // asignar la variable "inIndexName" = i
                     env.Set(inIndexName, i);
@@ -63,7 +62,8 @@ public class ForStatement : INode
                 return result;
             }
             // b) si es Dictionary<string, object> => iterar con claves
-            else if (raw is Dictionary<string, object> map)
+
+            if (raw is Dictionary<string, object> map)
             {
                 object resultDict = null;
                 foreach (var kv in map)
@@ -82,15 +82,13 @@ public class ForStatement : INode
 
                 return resultDict;
             }
-            else
-            {
-                throw new Exception(
-                    $"for(... in ...) solo soporta listas o diccionarios. '{inArray}' es {raw?.GetType().Name}");
-            }
+
+            throw new Exception(
+                $"for(... in ...) solo soporta listas o diccionarios. '{inArray}' es {raw?.GetType().Name}");
         }
 
         // 2) si no es "for(... in ...)", hacemos for(init; cond; post)
-        var inner = new R2Lang.Core.Environment(env);
+        var inner = new Environment(env);
         Init?.Eval(inner);
 
         object resultNormal = null;
@@ -98,7 +96,7 @@ public class ForStatement : INode
         {
             if (Condition != null)
             {
-                var c = R2Lang.Core.BuiltinOps.ToBool(Condition.Eval(inner));
+                var c = BuiltinOps.ToBool(Condition.Eval(inner));
                 if (!c) break;
             }
 

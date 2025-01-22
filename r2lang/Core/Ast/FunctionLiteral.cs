@@ -3,7 +3,7 @@ namespace R2Lang.Core.Ast;
 
 public class FunctionLiteral : INode
 {
-    public List<string> Args { get; set; } = new List<string>();
+    public List<string> Args { get; set; } = new();
     public BlockStatement Body { get; set; }
 
     public object Eval(Environment env)

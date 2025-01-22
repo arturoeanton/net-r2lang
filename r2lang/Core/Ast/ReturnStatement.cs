@@ -7,7 +7,7 @@ public class ReturnStatement : INode
 
     public object Eval(Environment env)
     {
-        object val = Value?.Eval(env);
+        var val = Value?.Eval(env);
         return new ReturnValue { Value = val };
     }
 }

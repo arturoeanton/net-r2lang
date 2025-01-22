@@ -14,7 +14,6 @@ public class ObjectInstance
 
         // Copiamos props
         foreach (var kv in blueprint)
-        {
             if (kv.Value is UserFunction uf)
             {
                 var newUF = new UserFunction
@@ -31,17 +30,13 @@ public class ObjectInstance
             {
                 objEnv.Set(kv.Key, kv.Value);
             }
-        }
 
         objEnv.Set("self", instance);
         objEnv.Set("this", instance);
 
         // llama constructor si existe
         var (ctorVal, found) = objEnv.Get("constructor");
-        if (found && ctorVal is UserFunction ctor)
-        {
-            ctor.Call(argVals);
-        }
+        if (found && ctorVal is UserFunction ctor) ctor.Call(argVals);
 
         return instance;
     }

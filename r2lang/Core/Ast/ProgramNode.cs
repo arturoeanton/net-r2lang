@@ -3,7 +3,7 @@ namespace R2Lang.Core.Ast;
 
 public class ProgramNode : INode
 {
-    public List<INode> Statements { get; set; } = new List<INode>();
+    public List<INode> Statements { get; set; } = new();
 
     public object Eval(Environment env)
     {
@@ -11,10 +11,7 @@ public class ProgramNode : INode
         foreach (var st in Statements)
         {
             result = st.Eval(env);
-            if (result is ReturnValue rv)
-            {
-                return rv.Value;
-            }
+            if (result is ReturnValue rv) return rv.Value;
         }
 
         return result;

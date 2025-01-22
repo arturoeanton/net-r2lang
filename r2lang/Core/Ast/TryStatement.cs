@@ -26,10 +26,7 @@ public class TryStatement : INode
         }
         finally
         {
-            if (FinallyBlock != null)
-            {
-                result = FinallyBlock.Eval(env);
-            }
+            if (FinallyBlock != null) result = FinallyBlock.Eval(env);
         }
 
         return result;

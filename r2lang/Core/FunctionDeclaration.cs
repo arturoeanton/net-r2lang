@@ -1,12 +1,12 @@
 #nullable disable
 using R2Lang.Core.Ast;
-namespace R2Lang.Core;
 
+namespace R2Lang.Core;
 
 public class FunctionDeclaration : INode
 {
     public string Name { get; set; }
-    public List<string> Args { get; set; } = new List<string>();
+    public List<string> Args { get; set; } = new();
     public BlockStatement Body { get; set; }
 
     public object Eval(Environment env)

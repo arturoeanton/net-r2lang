@@ -3,7 +3,7 @@ namespace R2Lang.Core.Ast;
 
 public class BlockStatement : INode
 {
-    public List<INode> Statements { get; set; } = new List<INode>();
+    public List<INode> Statements { get; set; } = new();
 
     public object Eval(Environment env)
     {
@@ -11,10 +11,7 @@ public class BlockStatement : INode
         foreach (var s in Statements)
         {
             result = s.Eval(env);
-            if (result is ReturnValue rv)
-            {
-                return rv;
-            }
+            if (result is ReturnValue rv) return rv;
         }
 
         return result;

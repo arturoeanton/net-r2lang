@@ -9,12 +9,12 @@ namespace R2Lang.Core;
 public class Lexer
 {
     private readonly string _input;
-    private int _pos;
-    private int _col;
-    private int _line;
     private readonly int _length;
+    private int _col;
 
     private Token _lastToken; // Distinción de +/- como signo u operador
+    private int _line;
+    private int _pos;
 
     public Lexer(string input)
     {
@@ -36,7 +36,7 @@ public class Lexer
             return tkEOF;
         }
 
-        char ch = _input[_pos];
+        var ch = _input[_pos];
 
         // 1) Strings
         if (ch == '"' || ch == '\'')
@@ -55,14 +55,12 @@ public class Lexer
                 _lastToken = tkSignNum;
                 return tkSignNum;
             }
-            else
-            {
-                // Devolvemos symbol
-                var tkSym = new Token(TokenType.SYMBOL, ch.ToString(), _line, _pos, _col);
-                Advance();
-                _lastToken = tkSym;
-                return tkSym;
-            }
+
+            // Devolvemos symbol
+            var tkSym = new Token(TokenType.SYMBOL, ch.ToString(), _line, _pos, _col);
+            Advance();
+            _lastToken = tkSym;
+            return tkSym;
         }
 
         // 3) Números sin signo
@@ -82,7 +80,7 @@ public class Lexer
         }
 
         // 5) Symbol de dos chars => => ?
-        if (TryTwoCharSymbol(out Token t2))
+        if (TryTwoCharSymbol(out var t2))
         {
             _lastToken = t2;
             return t2;
@@ -96,7 +94,7 @@ public class Lexer
     }
 
     /// <summary>
-    /// Determina si +n / -n se parsea como un número con signo
+    ///     Determina si +n / -n se parsea como un número con signo
     /// </summary>
     private bool ShouldBeSign()
     {
@@ -114,14 +112,11 @@ public class Lexer
 
     private void SkipWhitespaceAndComments()
     {
-        bool keepGoing = true;
+        var keepGoing = true;
         while (keepGoing && _pos < _length)
         {
             keepGoing = false;
-            while (_pos < _length && IsWhitespace(_input[_pos]))
-            {
-                Advance();
-            }
+            while (_pos < _length && IsWhitespace(_input[_pos])) Advance();
 
             if (_pos < _length && _input[_pos] == '/')
             {
@@ -159,9 +154,9 @@ public class Lexer
 
     private Token ParseString(char quote)
     {
-        int startPos = _pos;
-        int startLine = _line;
-        int startCol = _col;
+        var startPos = _pos;
+        var startLine = _line;
+        var startCol = _col;
 
         Advance(); // consumir comilla
 
@@ -181,23 +176,17 @@ public class Lexer
 
     private Token ParseNumberWithSign()
     {
-        int sPos = _pos;
-        int sLine = _line;
-        int sCol = _col;
+        var sPos = _pos;
+        var sLine = _line;
+        var sCol = _col;
 
         Advance(); // + o -
-        while (_pos < _length && char.IsDigit(_input[_pos]))
-        {
-            Advance();
-        }
+        while (_pos < _length && char.IsDigit(_input[_pos])) Advance();
 
         if (_pos < _length && _input[_pos] == '.')
         {
             Advance();
-            while (_pos < _length && char.IsDigit(_input[_pos]))
-            {
-                Advance();
-            }
+            while (_pos < _length && char.IsDigit(_input[_pos])) Advance();
         }
 
         var val = _input.Substring(sPos, _pos - sPos);
@@ -206,22 +195,16 @@ public class Lexer
 
     private Token ParseNumber()
     {
-        int sPos = _pos;
-        int sLine = _line;
-        int sCol = _col;
+        var sPos = _pos;
+        var sLine = _line;
+        var sCol = _col;
 
-        while (_pos < _length && char.IsDigit(_input[_pos]))
-        {
-            Advance();
-        }
+        while (_pos < _length && char.IsDigit(_input[_pos])) Advance();
 
         if (_pos < _length && _input[_pos] == '.')
         {
             Advance();
-            while (_pos < _length && char.IsDigit(_input[_pos]))
-            {
-                Advance();
-            }
+            while (_pos < _length && char.IsDigit(_input[_pos])) Advance();
         }
 
         var val = _input.Substring(sPos, _pos - sPos);
@@ -230,14 +213,11 @@ public class Lexer
 
     private Token ParseIdentOrKeyword()
     {
-        int sPos = _pos;
-        int sLine = _line;
-        int sCol = _col;
+        var sPos = _pos;
+        var sLine = _line;
+        var sCol = _col;
 
-        while (_pos < _length && (IsLetter(_input[_pos]) || char.IsDigit(_input[_pos])))
-        {
-            Advance();
-        }
+        while (_pos < _length && (IsLetter(_input[_pos]) || char.IsDigit(_input[_pos]))) Advance();
 
         var literal = _input.Substring(sPos, _pos - sPos).ToLower();
 
@@ -301,12 +281,12 @@ public class Lexer
 
     private bool IsLetter(char c)
     {
-        return char.IsLetter(c) || (c == '_') || (c == '$');
+        return char.IsLetter(c) || c == '_' || c == '$';
     }
 
     private bool IsWhitespace(char c)
     {
-        return (c == ' ' || c == '\n' || c == '\r' || c == '\t');
+        return c == ' ' || c == '\n' || c == '\r' || c == '\t';
     }
 
     private void Advance()

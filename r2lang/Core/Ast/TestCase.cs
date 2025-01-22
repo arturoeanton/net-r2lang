@@ -4,7 +4,7 @@ namespace R2Lang.Core.Ast;
 public class TestCase : INode
 {
     public string Name { get; set; }
-    public List<TestStep> Steps { get; set; } = new List<TestStep>();
+    public List<TestStep> Steps { get; set; } = new();
 
     public object Eval(Environment env)
     {
@@ -16,14 +16,10 @@ public class TestCase : INode
         {
             var stype = step.Type;
             if (stype == "And" && previousStepType != null)
-            {
                 // se reutiliza el step anterior
                 stype = previousStepType;
-            }
             else
-            {
                 previousStepType = stype;
-            }
 
             Console.Write($"  {stype}: ");
             // si es un call
@@ -31,10 +27,7 @@ public class TestCase : INode
             {
                 var calVal = ce.Callee.Eval(env);
                 var argVals = new List<object>();
-                foreach (var a in ce.Args)
-                {
-                    argVals.Add(a.Eval(env));
-                }
+                foreach (var a in ce.Args) argVals.Add(a.Eval(env));
 
                 if (calVal is UserFunction uf)
                 {
