@@ -6,16 +6,65 @@ public class R2Thread
     
     
     //poner un waitgroup para que no se cierre el programa antes de que termine la tarea
-    public static WaitGroup waitGroup = new WaitGroup();
-    private readonly object lockObject = new object();
-
+    private static readonly WaitGroup WaitGroup1 = new WaitGroup();
     
     public static void RegisterAll(Environment env)
     {
         env.Set("r2", new BuiltinFunction(RunThread));
         env.Set("r2_wait_all", new BuiltinFunction(WaitAll));
         env.Set("r2_atomic", new BuiltinFunction(Atomic));
+        env.Set("r2_sleep", new BuiltinFunction(Sleep));
+        
+        
+        env.Set("thread", new BuiltinFunction(RunThread));
+        env.Set("atomic", new BuiltinFunction(Atomic));
+        env.Set("wait_all", new BuiltinFunction(WaitAll));
+        env.Set("sleep", new BuiltinFunction(Sleep));
+
     }
+    
+    private static object Sleep(params object[] args)
+    {
+        if (args.Length < 1)
+        {
+            throw new Exception("sleep() requires at least 1 argument");
+        }
+
+        if (args.Length == 1)
+        {
+            if (args[0] is not int ms)
+            {
+                throw new Exception("sleep() requires an integer as first argument");
+            }
+            Thread.Sleep(ms);
+        }
+        if (args.Length == 2)
+        {
+            if (args[0] is not int ms)
+            {
+                throw new Exception("sleep() requires an integer as first argument");
+            }
+            if (args[1] is not string unitTime)
+            {
+                throw new Exception("sleep() requires an integer as second argument");
+            }
+            
+            var unit = unitTime switch
+            {
+                "ms" => 1,
+                "s" => 1000,
+                "m" => 60000,
+                "h" => 3600000,
+                _ => throw new Exception("sleep() requires a valid unit time")
+            };
+            
+            Thread.Sleep(ms * unit);
+        }
+        
+        throw new Exception("sleep() requires 1 or 2 arguments");
+        
+    }
+    
 
     private static object Atomic(params object[] args)
     {
@@ -30,7 +79,7 @@ public class R2Thread
         {
             // 2) resto de argumentos
             object out1;
-            lock (waitGroup)
+            lock (WaitGroup1)
             {
                 out1 = fn.Call(rest);
             }
@@ -38,7 +87,7 @@ public class R2Thread
         }else if (args[0] is BuiltinFunction bf)
         {
             object out1;
-            lock (waitGroup)
+            lock (WaitGroup1)
             {
                 out1 = bf.Invoke(rest);
             }
@@ -52,7 +101,7 @@ public class R2Thread
     }
     public static object WaitAll(params object[] args)
     {
-        waitGroup.Wait();
+        WaitGroup1.Wait();
         return null;
     }
 
@@ -71,7 +120,7 @@ public class R2Thread
             var rest = args.Skip(1).ToArray();
            
             // 3) ejecutar la función en un hilo 
-            waitGroup.Add();
+            WaitGroup1.Add();
             new Thread(() =>
             {
                 try
@@ -84,7 +133,7 @@ public class R2Thread
                 }
                 finally
                 {
-                    waitGroup.Done();
+                    WaitGroup1.Done();
                 }
             }).Start(); 
         }
