@@ -6,8 +6,7 @@ namespace R2Lang.Core;
 // =========================================================
 // 2) LEXER con _lastToken (manejo de + / -)
 // =========================================================
-public class Lexer
-{
+public class Lexer {
     private readonly string _input;
     private readonly int _length;
     private int _col;
@@ -26,8 +25,7 @@ public class Lexer
         _lastToken = null;
     }
 
-    public Token NextToken()
-    {
+    public Token NextToken() {
         SkipWhitespaceAndComments();
         if (_pos >= _length)
         {
@@ -279,18 +277,15 @@ public class Lexer
         return new Token(type, val, line, sPos, sCol);
     }
 
-    private bool IsLetter(char c)
-    {
+    private bool IsLetter(char c) {
         return char.IsLetter(c) || c == '_' || c == '$';
     }
 
-    private bool IsWhitespace(char c)
-    {
+    private bool IsWhitespace(char c) {
         return c == ' ' || c == '\n' || c == '\r' || c == '\t';
     }
 
-    private void Advance()
-    {
+    private void Advance() {
         if (_pos < _length)
         {
             if (_input[_pos] == '\n')
